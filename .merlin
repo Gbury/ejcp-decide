@@ -1,0 +1,6 @@
+S ./
+B _build/
+
+PKG result
+PKG yojson
+PKG ppx_deriving_yojson

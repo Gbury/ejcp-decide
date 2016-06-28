@@ -21,8 +21,8 @@ module Main = struct
 
   let point_of_yojson = function
     | `List [`Float x; `Float y] ->
-      Ok { x; y; }
-    | _ -> Error "bad point"
+      Result.Ok { x; y; }
+    | _ -> Result.Error "bad point"
 
   let eq_points a b =
     a.x = b.x && a.y = b.y
@@ -118,8 +118,8 @@ module Main = struct
         | _ -> assert false
       in
       List.iter aux l;
-      Ok res
-    | _ -> Error "bad lcm"
+      Result.Ok res
+    | _ -> Result.Error "bad lcm"
 
   type input = {
     random_seed : int;
@@ -364,13 +364,21 @@ module Main = struct
             | _ -> assert false
           ))
 
+  let array_for_all a =
+    let open Pervasives in
+    let rec aux a i =
+      if i >= Array.length a then true
+      else a.(i) && aux a (i + 1)
+    in
+    aux a 0
+
   let fuv puv pum =
     Array.init 15 (fun i ->
-        (not puv.(i)) || (Array.for_all (fun x -> x) pum.(i))
+        (not puv.(i)) || (array_for_all pum.(i))
       )
 
   let launch fuv =
-    Array.for_all (fun x -> x) fuv
+    array_for_all fuv
 
   let decide input =
     let cmv = cmv input in
@@ -382,12 +390,12 @@ end
 
 let () =
   match Main.input_of_yojson (Yojson.Safe.from_file Sys.argv.(1)) with
-  | Ok input ->
+  | Result.Ok input ->
     if Main.decide input then
       Format.printf "YES@."
     else
       Format.printf "NO@."
-  | Error msg ->
+  | Result.Error msg ->
     Format.printf "Error during parsing:\n%s@." msg;
     exit 1
 
