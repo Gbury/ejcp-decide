@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for f in `ls -v tests/`;
+do
+  echo -n "$f : "
+  ./main.native tests/$f
+done
+
