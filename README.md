@@ -1,5 +1,7 @@
 # ejcp-decide
 
+Tested with Ocaml 4.03.0
+
 Build:
 
 ```

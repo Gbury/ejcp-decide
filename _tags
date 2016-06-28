@@ -1,1 +1,1 @@
-true: package(yojson), package(ppx_deriving_yojson)
+true: package(yojson), package(ppx_deriving_yojson), optimize(3)
