@@ -24,6 +24,10 @@ module Main = struct
       Result.Ok { x; y; }
     | _ -> Result.Error "bad point"
 
+  (* Distance on points *)
+  let dist a b =
+    sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
+
   let eq_points a b =
     a.x = b.x && a.y = b.y
 
@@ -33,17 +37,13 @@ module Main = struct
     else
       (if a.y >= 0. then 1 else 2)
 
-  (* Distance on points *)
-  let dist a b =
-    sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
-
   let dist_line (a, b) =
     if eq_points a b then (fun c -> dist a c)
     else
       let d = dist a b in
       (fun c ->
-        let p = (b.y -. a.x) *. c.x -.
-                (b.y -. a.x) *. c.y +.
+        let p = (b.y -. a.y) *. c.x -.
+                (b.x -. a.x) *. c.y +.
                 b.x *. a.y -.
                 b.y *. a.x
         in
@@ -382,6 +382,7 @@ module Main = struct
 
   let decide input =
     let cmv = cmv input in
+    Array.iteri (fun i b -> Format.printf "%d : %b@." i b) cmv;
     let pum = pum cmv input.lcm in
     let fuv = fuv input.puv pum in
     launch fuv
