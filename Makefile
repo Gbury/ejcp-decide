@@ -1,13 +1,19 @@
 
-all:
+all : build
+
+build:
 	ocamlbuild -use-ocamlfind main.native
 
 clean:
 	ocamlbuild -clean
 
-test: all
+test: build
 	./run
 
-count: all
+count: build
 	./run | grep YES | wc -l
+
+analyze:
+	ocamlbuild -use-ocamlfind analyze.native
+	./analyze.native results-1001.json
 
